@@ -46,7 +46,42 @@ canvas {
 button {
     width: 260px;
     height: 70px;
-    font-siCAFE>BÔ>B
+    font-size: 22px;
+    font-weight: bold;
+    border-radius: 12px;
+    border: none;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+#spinBtn {
+    background: #ff9800;
+    color: #000;
+}
+
+#spinBtn:disabled {
+    background: #555;
+    color: #aaa;
+}
+
+#nextBtn {
+    background: #4caf50;
+    color: #000;
+    display: none;
+}
+
+#result {
+    margin-top: 15px;
+    font-size: 24px;
+    color: #00e676;
+    text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<h1>☕ VÒNG QUAY MAY MẮN</h1>
 
 <div class="wheel-container">
     <div class="pointer"></div>
@@ -76,7 +111,7 @@ const prizes = [
 const totalWeight = prizes.reduce((s, p) => s + p.weight, 0);
 const center = canvas.width / 2;
 let currentAngle = 0;
-const SPIN_TIME = 4000; // thời gian quay (ms)
+const SPIN_TIME = 4000;
 
 // Vẽ vòng quay
 function drawWheel() {
@@ -103,7 +138,7 @@ function drawWheel() {
 }
 drawWheel();
 
-// Chọn thưởng + góc chính xác
+// Chọn thưởng
 function getPrizeByAngle() {
     let rand = Math.random() * totalWeight;
     let sum = 0;
@@ -128,21 +163,16 @@ function spin() {
     spinBtn.disabled = true;
 
     const { prize, angle } = getPrizeByAngle();
-
     const spins = 6;
-    const targetAngle = spins * 360 - angle;
+    const targetAngle = spins * 360 - angle - 90; // canh kim 12h
 
     currentAngle += targetAngle;
 
-    // 🔥 RESET transition trước
     canvas.style.transition = "none";
     canvas.style.transform = `rotate(${currentAngle - targetAngle}deg)`;
-
-    // 🔥 ÉP trình duyệt render
     canvas.offsetHeight;
 
-    // 🔥 QUAY THẬT
-    canvas.style.transition = `transform ${SPIN_TIME / 1000}s cubic-bezier(0.33, 1, 0.68, 1)`;
+    canvas.style.transition = `transform ${SPIN_TIME / 1000}s cubic-bezier(0.33,1,0.68,1)`;
     canvas.style.transform = `rotate(${currentAngle}deg)`;
 
     setTimeout(() => {
@@ -151,7 +181,6 @@ function spin() {
     }, SPIN_TIME);
 }
 
-// Khách tiếp theo
 function nextCustomer() {
     resultDiv.innerHTML = "";
     spinBtn.disabled = false;
@@ -164,9 +193,3 @@ nextBtn.addEventListener("click", nextCustomer);
 
 </body>
 </html>
-
-
-
-
-
-
