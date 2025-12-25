@@ -165,14 +165,14 @@ function spin() {
     }
 }
 
-    canvas.style.transition = "transform 4s ease-out";
+    canvas.style.transition = "transform 6s cubic-bezier(0.33, 1, 0.68, 1)";
     canvas.style.transform = `rotate(${currentAngle}deg)`;
 
     setTimeout(() => {
-        resultDiv.innerHTML = `🎁 Trúng <b>${prize.text} VNĐ</b>`;
-        nextBtn.style.display = "block";
-    }, 4000);
-}
+    resultDiv.innerHTML = `🎁 Trúng <b>${prize.text} VNĐ</b>`;
+    nextBtn.style.display = "block";
+}, 6000);
+
 
 function nextCustomer() {
     resultDiv.innerHTML = "";
@@ -186,5 +186,6 @@ nextBtn.addEventListener("click", nextCustomer);
 
 </body>
 </html>
+
 
 
