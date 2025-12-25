@@ -110,7 +110,9 @@ const prizes = [
 const totalWeight = prizes.reduce((s, p) => s + p.weight, 0);
 const center = canvas.width / 2;
 let currentAngle = 0;
+const SPIN_TIME = 4000; // thời gian quay (ms)
 
+// Vẽ vòng quay
 function drawWheel() {
     let start = 0;
     prizes.forEach(p => {
@@ -135,34 +137,47 @@ function drawWheel() {
 }
 drawWheel();
 
-function getPrize() {
+// Chọn thưởng + góc chính xác
+function getPrizeByAngle() {
     let rand = Math.random() * totalWeight;
     let sum = 0;
+    let startAngle = 0;
+
     for (let p of prizes) {
-sum += p.weight;
-        if (rand <= sum) return p;
+        let sliceAngle = (p.weight / totalWeight) * 360;
+        sum += p.weight;
+
+        if (rand <= sum) {
+            return {
+                prize: p,
+                angle: startAngle + sliceAngle / 2
+            };
+        }
+        startAngle += sliceAngle;
     }
 }
 
+// Quay
 function spin() {
     spinBtn.disabled = true;
 
     const { prize, angle } = getPrizeByAngle();
 
-    const spins = 6; // số vòng
+    const spins = 6; // số vòng quay
     const targetAngle = spins * 360 - angle;
 
-    currentAngle += targetAngle; // 🔥 BẮT BUỘC PHẢI CỘNG
+    currentAngle += targetAngle;
 
-    canvas.style.transition = "transform 4s ease-out";
+    canvas.style.transition = `transform ${SPIN_TIME / 1000}s cubic-bezier(0.33, 1, 0.68, 1)`;
     canvas.style.transform = `rotate(${currentAngle}deg)`;
 
     setTimeout(() => {
         resultDiv.innerHTML = `🎁 Trúng <b>${prize.text} VNĐ</b>`;
         nextBtn.style.display = "block";
-    }, 4000);
+    }, SPIN_TIME);
 }
 
+// Khách tiếp theo
 function nextCustomer() {
     resultDiv.innerHTML = "";
     spinBtn.disabled = false;
@@ -175,7 +190,3 @@ nextBtn.addEventListener("click", nextCustomer);
 
 </body>
 </html>
-
-
-
-
