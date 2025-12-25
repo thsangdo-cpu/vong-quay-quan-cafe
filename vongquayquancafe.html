@@ -1,0 +1,181 @@
+
+
+3D Modeling App
+- croissant
+- Tiramisu
+- Pain aux fraise
+- Cookies
+- Pain suisse fraise
+- Tart Trứng
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Vòng Quay Quán Cafe</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    margin: 0;
+    background: radial-gradient(circle, #222, #000);
+    color: #fff;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+h1 {
+    font-size: 26px;
+    margin-bottom: 10px;
+}
+
+.wheel-container {
+    position: relative;
+    width: 320px;
+    height: 320px;
+}
+
+canvas {
+    border-radius: 50%;
+}
+
+.pointer {
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 18px solid transparent;
+    border-right: 18px solid transparent;
+    border-bottom: 36px solid #ff1744;
+}
+
+button {
+    width: 260px;
+    height: 70px;
+    font-size: 22px;
+    font-weight: bold;
+    border-radius: 12px;
+    border: none;
+    margin-top: 15px;
+}
+
+#spinBtn {
+    background: #ff9800;
+    color: #000;
+}
+
+#spinBtn:disabled {
+    background: #555;
+    color: #aaa;
+}
+
+#nextBtn {
+    background: #4caf50;
+    color: #000;
+    display: none;
+}
+
+#result {
+    margin-top: 15px;
+    font-size: 24px;
+    color: #00e676;
+    text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<h1>☕ VÒNG QUAY MAY MẮN</h1>
+
+<div class="wheel-container">
+    <div class="pointer"></div>
+    <canvas id="wheel" width="320" height="320"></canvas>
+</div>
+
+<button id="spinBtn">QUAY NGAY</button>
+<button id="nextBtn">KHÁCH TIẾP THEO</button>
+
+<div id="result"></div>
+
+<script>
+const canvas = document.getElementById("wheel");
+const ctx = canvas.getContext("2d");
+const spinBtn = document.getElementById("spinBtn");
+const nextBtn = document.getElementById("nextBtn");
+const resultDiv = document.getElementById("result");
+
+const prizes = [
+    { text: "20.000", weight: 15, color: "#4caf50" },
+    { text: "30.000", weight: 15, color: "#03a9f4" },
+    { text: "50.000", weight: 50, color: "#ffeb3b" },
+    { text: "100.000", weight: 15, color: "#ff5722" },
+    { text: "200.000", weight: 5, color: "#e91e63" }
+];
+
+const totalWeight = prizes.reduce((s, p) => s + p.weight, 0);
+const center = canvas.width / 2;
+let currentAngle = 0;
+
+function drawWheel() {
+    let start = 0;
+    prizes.forEach(p => {
+        const slice = (p.weight / totalWeight) * Math.PI * 2;
+        ctx.beginPath();
+        ctx.moveTo(center, center);
+        ctx.arc(center, center, center, start, start + slice);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+
+        ctx.save();
+        ctx.translate(center, center);
+        ctx.rotate(start + slice / 2);
+        ctx.textAlign = "right";
+        ctx.fillStyle = "#000";
+        ctx.font = "bold 16px Arial";
+        ctx.fillText(p.text, center - 10, 5);
+        ctx.restore();
+
+        start += slice;
+    });
+}
+drawWheel();
+
+function getPrize() {
+    let rand = Math.random() * totalWeight;
+    let sum = 0;
+    for (let p of prizes) {
+sum += p.weight;
+        if (rand <= sum) return p;
+    }
+}
+
+function spin() {
+    spinBtn.disabled = true;
+    const prize = getPrize();
+
+    currentAngle += 7 * 360 + Math.random() * 360;
+    canvas.style.transition = "transform 4s ease-out";
+    canvas.style.transform = `rotate(${currentAngle}deg)`;
+
+    setTimeout(() => {
+        resultDiv.innerHTML = `🎁 Trúng <b>${prize.text} VNĐ</b>`;
+        nextBtn.style.display = "block";
+    }, 4000);
+}
+
+function nextCustomer() {
+    resultDiv.innerHTML = "";
+    spinBtn.disabled = false;
+    nextBtn.style.display = "none";
+}
+
+spinBtn.addEventListener("click", spin);
+nextBtn.addEventListener("click", nextCustomer);
+</script>
+
+</body>
+</html>
