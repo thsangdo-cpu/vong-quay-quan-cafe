@@ -163,11 +163,19 @@ function spin() {
 
     const { prize, angle } = getPrizeByAngle();
 
-    const spins = 6; // số vòng quay
+    const spins = 6;
     const targetAngle = spins * 360 - angle;
 
     currentAngle += targetAngle;
 
+    // 🔥 RESET transition trước
+    canvas.style.transition = "none";
+    canvas.style.transform = `rotate(${currentAngle - targetAngle}deg)`;
+
+    // 🔥 ÉP trình duyệt render
+    canvas.offsetHeight;
+
+    // 🔥 QUAY THẬT
     canvas.style.transition = `transform ${SPIN_TIME / 1000}s cubic-bezier(0.33, 1, 0.68, 1)`;
     canvas.style.transform = `rotate(${currentAngle}deg)`;
 
@@ -190,3 +198,4 @@ nextBtn.addEventListener("click", nextCustomer);
 
 </body>
 </html>
+
