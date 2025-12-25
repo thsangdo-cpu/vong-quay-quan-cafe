@@ -146,33 +146,22 @@ sum += p.weight;
 
 function spin() {
     spinBtn.disabled = true;
-    function getPrizeByAngle() {
-    let rand = Math.random() * totalWeight;
-    let sum = 0;
-    let startAngle = 0;
 
-    for (let p of prizes) {
-        let sliceAngle = (p.weight / totalWeight) * 360;
-        sum += p.weight;
+    const { prize, angle } = getPrizeByAngle();
 
-        if (rand <= sum) {
-            return {
-                prize: p,
-                angle: startAngle + sliceAngle / 2
-            };
-        }
-        startAngle += sliceAngle;
-    }
-}
+    const spins = 6; // số vòng
+    const targetAngle = spins * 360 - angle;
 
-    canvas.style.transition = "transform 6s cubic-bezier(0.33, 1, 0.68, 1)";
+    currentAngle += targetAngle; // 🔥 BẮT BUỘC PHẢI CỘNG
+
+    canvas.style.transition = "transform 4s ease-out";
     canvas.style.transform = `rotate(${currentAngle}deg)`;
 
     setTimeout(() => {
-    resultDiv.innerHTML = `🎁 Trúng <b>${prize.text} VNĐ</b>`;
-    nextBtn.style.display = "block";
-}, 6000);
-
+        resultDiv.innerHTML = `🎁 Trúng <b>${prize.text} VNĐ</b>`;
+        nextBtn.style.display = "block";
+    }, 4000);
+}
 
 function nextCustomer() {
     resultDiv.innerHTML = "";
@@ -186,6 +175,7 @@ nextBtn.addEventListener("click", nextCustomer);
 
 </body>
 </html>
+
 
 
 
