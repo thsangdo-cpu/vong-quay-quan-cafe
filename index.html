@@ -180,7 +180,7 @@ function spin() {
     canvas.style.transform = `rotate(${currentAngle}deg)`;
 
     setTimeout(() => {
-        resultDiv.innerHTML = `🎁 Trúng <b>${prize.text} VNĐ</b>`;
+        resultDiv.innerHTML = `🎁 Bị phạt <b>${prize.text} VNĐ</b>`;
         nextBtn.style.display = "block";
     }, SPIN_TIME);
 }
@@ -198,4 +198,5 @@ nextBtn.addEventListener("click", nextCustomer);
 
 </body>
 </html>
+
 
