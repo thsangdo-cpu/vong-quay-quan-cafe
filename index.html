@@ -88,7 +88,7 @@ button {
 </div>
 
 <button id="spinBtn">QUAY NGAY</button>
-<button id="nextBtn">KHÁCH TIẾP THEO</button>
+<button id="nextBtn">NHÂN VIÊN TIẾP THEO</button>
 
 <div id="result"></div>
 
@@ -146,9 +146,25 @@ sum += p.weight;
 
 function spin() {
     spinBtn.disabled = true;
-    const prize = getPrize();
+    function getPrizeByAngle() {
+    let rand = Math.random() * totalWeight;
+    let sum = 0;
+    let startAngle = 0;
 
-    currentAngle += 7 * 360 + Math.random() * 360;
+    for (let p of prizes) {
+        let sliceAngle = (p.weight / totalWeight) * 360;
+        sum += p.weight;
+
+        if (rand <= sum) {
+            return {
+                prize: p,
+                angle: startAngle + sliceAngle / 2
+            };
+        }
+        startAngle += sliceAngle;
+    }
+}
+
     canvas.style.transition = "transform 4s ease-out";
     canvas.style.transform = `rotate(${currentAngle}deg)`;
 
@@ -170,4 +186,5 @@ nextBtn.addEventListener("click", nextCustomer);
 
 </body>
 </html>
+
 
